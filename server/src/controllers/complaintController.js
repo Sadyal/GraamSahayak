@@ -101,10 +101,15 @@ const getAllComplaints = async (req, res, next) => {
       query.complaintType = complaintType;
     }
 
-    // Build filter based on citizen's village
+    // Build filter based on citizen's village with strict Admin separation
+    let targetVillage = village;
+    if (req.user.role === 'Admin') {
+      targetVillage = req.user.village; // Enforce regular Admin's village
+    }
+
     let citizenIds = [];
-    if (village) {
-      const users = await require('../models/User').find({ village: { $regex: village, $options: 'i' } });
+    if (targetVillage) {
+      const users = await require('../models/User').find({ village: { $regex: `^${targetVillage}$`, $options: 'i' } });
       citizenIds = users.map((u) => u._id);
       query.citizen = { $in: citizenIds };
     }
@@ -146,10 +151,16 @@ const updateComplaintStatus = async (req, res, next) => {
       throw new Error('Please specify a status update');
     }
 
-    let complaint = await Complaint.findById(req.params.id);
+    let complaint = await Complaint.findById(req.params.id).populate('citizen');
     if (!complaint) {
       res.status(404);
       throw new Error('Complaint not found');
+    }
+
+    // Village isolation check: Admin can only modify complaints from their own village
+    if (req.user.role === 'Admin' && (!complaint.citizen || complaint.citizen.village.toLowerCase() !== req.user.village.toLowerCase())) {
+      res.status(403);
+      throw new Error('Not authorized to access or modify records of other villages.');
     }
 
     complaint.status = status;
@@ -174,11 +185,17 @@ const updateComplaintStatus = async (req, res, next) => {
 // @access  Private (Admin)
 const deleteComplaint = async (req, res, next) => {
   try {
-    const complaint = await Complaint.findById(req.params.id);
+    const complaint = await Complaint.findById(req.params.id).populate('citizen');
 
     if (!complaint) {
       res.status(404);
       throw new Error('Complaint not found');
+    }
+
+    // Village isolation check: Admin can only delete complaints from their own village
+    if (req.user.role === 'Admin' && (!complaint.citizen || complaint.citizen.village.toLowerCase() !== req.user.village.toLowerCase())) {
+      res.status(403);
+      throw new Error('Not authorized to access or modify records of other villages.');
     }
 
     // Clean up files locally

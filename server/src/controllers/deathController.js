@@ -114,6 +114,13 @@ const getAllDeathApplications = async (req, res, next) => {
       query.deceasedName = { $regex: deceasedName, $options: 'i' };
     }
 
+    // Filter by Admin's own village if request is from regular Admin
+    if (req.user.role === 'Admin') {
+      const users = await require('../models/User').find({ village: { $regex: `^${req.user.village}$`, $options: 'i' } });
+      const citizenIds = users.map((u) => u._id);
+      query.citizen = { $in: citizenIds };
+    }
+
     const applications = await DeathApplication.find(query)
       .populate('citizen', 'name village wardNumber phone email')
       .sort({ createdAt: -1 });
@@ -140,11 +147,17 @@ const updateDeathApplicationStatus = async (req, res, next) => {
       throw new Error('Please specify a valid status: Approved or Rejected');
     }
 
-    let application = await DeathApplication.findById(req.params.id);
+    let application = await DeathApplication.findById(req.params.id).populate('citizen');
 
     if (!application) {
       res.status(404);
       throw new Error('Application not found');
+    }
+
+    // Village isolation check: Admin can only modify applications from their own village
+    if (req.user.role === 'Admin' && (!application.citizen || application.citizen.village.toLowerCase() !== req.user.village.toLowerCase())) {
+      res.status(403);
+      throw new Error('Not authorized to access or modify records of other villages.');
     }
 
     application.status = status;
@@ -184,13 +197,19 @@ const getDeathApplicationById = async (req, res, next) => {
       throw new Error('Application not found');
     }
 
-    // Role check: Admin can see anything, Citizen can only see their own application
-    if (
-      req.user.role !== 'Admin' &&
-      application.citizen._id.toString() !== req.user._id.toString()
-    ) {
-      res.status(403);
-      throw new Error('Not authorized to view this application record');
+    // Role and Village checks
+    if (req.user.role !== 'SuperAdmin') {
+      if (req.user.role === 'Admin') {
+        if (!application.citizen || application.citizen.village.toLowerCase() !== req.user.village.toLowerCase()) {
+          res.status(403);
+          throw new Error('Not authorized to view records of other villages');
+        }
+      } else { // Citizen
+        if (application.citizen._id.toString() !== req.user._id.toString()) {
+          res.status(403);
+          throw new Error('Not authorized to view this application record');
+        }
+      }
     }
 
     res.status(200).json({

@@ -11,6 +11,7 @@ import {
   User,
   Inbox,
   FileCheck,
+  Building,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -38,9 +39,20 @@ const Sidebar = () => {
     { path: '/admin/complaints', label: 'Complaints Management', icon: <Inbox size={18} /> },
     { path: '/admin/birth-requests', label: 'Birth Requests', icon: <Baby size={18} /> },
     { path: '/admin/death-requests', label: 'Death Requests', icon: <Activity size={18} /> },
+    { path: '/admin/villagers', label: 'Villagers Directory', icon: <User size={18} /> },
   ];
 
-  const links = user.role === 'Admin' ? adminLinks : citizenLinks;
+  const superAdminLinks = [
+    { path: '/admin', label: 'Admin Dashboard', icon: <LayoutDashboard size={18} /> },
+    { path: '/admin/approvals', label: 'Admin Approvals', icon: <FileCheck size={18} /> },
+    { path: '/admin/villages', label: 'Village Management', icon: <Building size={18} /> },
+  ];
+
+  const links = user.role === 'SuperAdmin'
+    ? superAdminLinks
+    : user.role === 'Admin'
+    ? adminLinks
+    : citizenLinks;
 
   return (
     <aside className="sidebar">

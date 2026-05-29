@@ -24,6 +24,9 @@ import AdminDashboard from '../pages/admin/Dashboard';
 import AdminComplaints from '../pages/admin/Complaints';
 import BirthRequests from '../pages/admin/BirthRequests';
 import DeathRequests from '../pages/admin/DeathRequests';
+import AdminApprovals from '../pages/admin/Approvals';
+import VillageManagement from '../pages/admin/VillageManagement';
+import VillagersDirectory from '../pages/admin/VillagersDirectory';
 
 // Certificate Generator / Viewer (Used by both roles)
 import CertificateGenerator from '../pages/admin/CertificateGenerator';
@@ -55,6 +58,9 @@ const AppRoutes = () => {
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="birth-requests" element={<BirthRequests />} />
         <Route path="death-requests" element={<DeathRequests />} />
+        <Route path="approvals" element={<AdminApprovals />} />
+        <Route path="villages" element={<VillageManagement />} />
+        <Route path="villagers" element={<VillagersDirectory />} />
       </Route>
 
       {/* Catch-all route */}

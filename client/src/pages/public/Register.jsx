@@ -14,16 +14,35 @@ const Register = () => {
     role: 'Citizen', // default to citizen
   });
   
+  const [villagesList, setVillagesList] = useState([]);
+  const [wardsList, setWardsList] = useState([]);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { register, user } = useContext(AuthContext);
+  const { register, logout, user } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  // Fetch official villages on component mount
+  useEffect(() => {
+    const fetchVillages = async () => {
+      try {
+        const res = await fetch('/api/villages');
+        const data = await res.json();
+        if (res.ok && data.success) {
+          setVillagesList(data.data || []);
+        }
+      } catch (err) {
+        console.error('Failed to load official village directory', err);
+      }
+    };
+    fetchVillages();
+  }, []);
 
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      if (user.role === 'Admin') {
+      if (user.role === 'Admin' || user.role === 'SuperAdmin') {
         navigate('/admin');
       } else {
         navigate('/citizen');
@@ -32,10 +51,26 @@ const Register = () => {
   }, [user, navigate]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    });
+    const fieldId = e.target.id;
+    const value = e.target.value;
+
+    if (fieldId === 'village') {
+      // Find selected village and set its wards
+      const selectedVillageObj = villagesList.find(v => v.name === value);
+      const wards = selectedVillageObj ? selectedVillageObj.wards : [];
+      setWardsList(wards);
+      
+      setFormData({
+        ...formData,
+        village: value,
+        wardNumber: '', // Reset selected ward
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [fieldId]: value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -52,7 +87,17 @@ const Register = () => {
     try {
       const data = await register(formData);
       if (data.role === 'Admin') {
-        navigate('/admin');
+        logout(); // Clear auto-login for pending admin
+        setSuccess('Administrator account registered successfully! Your account is now pending review and approval by the Super Admin. You will be able to log in using this portal once approved.');
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          village: '',
+          wardNumber: '',
+          password: '',
+          role: 'Citizen',
+        });
       } else {
         navigate('/citizen');
       }
@@ -75,6 +120,7 @@ const Register = () => {
           </p>
 
           {error && <div className="alert alert-error">{error}</div>}
+          {success && <div className="alert alert-success">{success}</div>}
 
           <form onSubmit={handleSubmit}>
             <div className="gov-form-row">
@@ -134,31 +180,41 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="gov-form-row">
+             <div className="gov-form-row">
               <div className="form-group">
-                <label htmlFor="village">Village (Gram)</label>
-                <input
-                  type="text"
+                <label htmlFor="village">Village (Gram Panchayat) *</label>
+                <select
                   id="village"
                   className="form-control"
-                  placeholder="e.g. Rampur"
                   value={formData.village}
                   onChange={handleChange}
-                  disabled={loading}
-                />
+                  disabled={loading || villagesList.length === 0}
+                >
+                  <option value="">Select Village</option>
+                  {villagesList.map((v) => (
+                    <option key={v._id} value={v.name}>
+                      {v.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div className="form-group">
-                <label htmlFor="wardNumber">Ward Number</label>
-                <input
-                  type="text"
+                <label htmlFor="wardNumber">Ward Number *</label>
+                <select
                   id="wardNumber"
                   className="form-control"
-                  placeholder="e.g. 04"
                   value={formData.wardNumber}
                   onChange={handleChange}
-                  disabled={loading}
-                />
+                  disabled={loading || !formData.village || wardsList.length === 0}
+                >
+                  <option value="">Select Ward</option>
+                  {wardsList.map((ward) => (
+                    <option key={ward} value={ward}>
+                      Ward {ward}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

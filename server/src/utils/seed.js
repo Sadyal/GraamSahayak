@@ -9,6 +9,7 @@ const User = require('../models/User');
 const Complaint = require('../models/Complaint');
 const BirthApplication = require('../models/BirthApplication');
 const DeathApplication = require('../models/DeathApplication');
+const Village = require('../models/Village');
 
 const seedData = async () => {
   try {
@@ -21,6 +22,22 @@ const seedData = async () => {
     await Complaint.deleteMany();
     await BirthApplication.deleteMany();
     await DeathApplication.deleteMany();
+    await Village.deleteMany();
+
+    console.log('Creating official villages and wards...');
+    await Village.create({
+      name: 'Rampur',
+      wards: ['01', '02', '03', '04', '05'],
+      district: 'Kangra',
+      state: 'Himachal Pradesh',
+    });
+    await Village.create({
+      name: 'Shyampur',
+      wards: ['01', '02', '03'],
+      district: 'Kangra',
+      state: 'Himachal Pradesh',
+    });
+    console.log('✓ Seeded Villages: Rampur (wards 01-05), Shyampur (wards 01-03)');
 
     console.log('Creating demo users...');
 
@@ -45,8 +62,22 @@ const seedData = async () => {
       village: 'Rampur',
       wardNumber: '01',
       role: 'Admin',
+      status: 'Approved',
     });
     console.log('✓ Admin Account Created: panchayat.admin@gov.in (password: adminpassword)');
+
+    // 3. Create Super Admin
+    const superAdmin = await User.create({
+      name: 'Panchayat Super Admin',
+      email: 'superadmin@graamsahayak.gov.in',
+      phone: '9000000000',
+      password: 'Sadyal@4752', // Will be encrypted by Pre-save hook
+      village: 'System',
+      wardNumber: '00',
+      role: 'SuperAdmin',
+      status: 'Approved',
+    });
+    console.log('✓ Super Admin Account Created: superadmin@graamsahayak.gov.in (password: Sadyal@4752)');
 
     console.log('Creating sample citizen grievances...');
     // Create complaint

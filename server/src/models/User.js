@@ -33,8 +33,15 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['Citizen', 'Admin'],
+      enum: ['Citizen', 'Admin', 'SuperAdmin'],
       default: 'Citizen',
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: ['Pending', 'Approved', 'Rejected'],
+      default: 'Approved',
+      index: true,
     },
   },
   {

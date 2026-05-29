@@ -204,7 +204,7 @@ const BirthRequests = () => {
                           SUPPORTING UPLOAD PROOF DOCUMENT
                         </span>
                         <a
-                          href={`/${app.documentPath}`}
+                          href={`http://localhost:5000/${app.documentPath}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn-outline"

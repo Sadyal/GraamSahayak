@@ -12,6 +12,14 @@ const authorize = (...roles) => {
       });
     }
 
+    // Enforce that village administrators must be approved
+    if (req.user.role === 'Admin' && req.user.status !== 'Approved') {
+      return res.status(403).json({
+        success: false,
+        message: `Your administrator account status is '${req.user.status}'. You are not authorized to perform this action.`,
+      });
+    }
+
     next();
   };
 };

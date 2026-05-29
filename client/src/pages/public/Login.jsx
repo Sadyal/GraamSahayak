@@ -15,7 +15,7 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      if (user.role === 'Admin') {
+      if (user.role === 'Admin' || user.role === 'SuperAdmin') {
         navigate('/admin');
       } else {
         navigate('/citizen');
@@ -34,7 +34,7 @@ const Login = () => {
     setLoading(true);
     try {
       const data = await login(emailOrPhone, password);
-      if (data.role === 'Admin') {
+      if (data.role === 'Admin' || data.role === 'SuperAdmin') {
         navigate('/admin');
       } else {
         navigate('/citizen');
@@ -96,14 +96,7 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Simple Demo Accounts Helper for Easy Testing! */}
-          <div style={{ marginTop: '20px', padding: '12px', border: '1px solid #ff9933', borderRadius: '4px', backgroundColor: '#fffdf9', fontSize: '12px' }}>
-            <strong style={{ color: '#ff9933', display: 'block', marginBottom: '4px', textTransform: 'uppercase' }}>
-              ℹ MVP Demo Accounts:
-            </strong>
-            <p style={{ margin: '2px 0' }}><strong>Citizen Role:</strong> Register your own or log in after creating.</p>
-            <p style={{ margin: '2px 0' }}><strong>Admin Role:</strong> Register an account with an email containing the word "admin" (e.g. <code>panchayat.admin@gov.in</code>) with role set to <strong>Admin</strong> in registration.</p>
-          </div>
+
 
           <div className="auth-footer">
             New citizen? <Link to="/register" style={{ fontWeight: 'bold' }}>Register Here</Link>

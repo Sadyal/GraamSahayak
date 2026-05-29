@@ -30,6 +30,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/complaints', require('./routes/complaintRoutes'));
 app.use('/api/birth', require('./routes/birthRoutes'));
 app.use('/api/death', require('./routes/deathRoutes'));
+app.use('/api/villages', require('./routes/villageRoutes'));
 
 // Centralized error handler
 app.use(errorHandler);
