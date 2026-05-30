@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import Navbar from '../../components/Navbar';
+import { restrictToNumeric, restrictToAlphabetic } from '../../utils/keyConstraints';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -133,6 +134,8 @@ const Register = () => {
                   placeholder="e.g. Ramesh Kumar"
                   value={formData.name}
                   onChange={handleChange}
+                  onKeyDown={restrictToAlphabetic}
+                  maxLength={50}
                   disabled={loading}
                 />
               </div>
@@ -161,6 +164,8 @@ const Register = () => {
                   placeholder="10-digit mobile number"
                   value={formData.phone}
                   onChange={handleChange}
+                  onKeyDown={restrictToNumeric}
+                  maxLength={10}
                   disabled={loading}
                 />
               </div>

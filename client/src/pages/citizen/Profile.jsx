@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { User, ShieldAlert, CheckCircle, Save, Key } from 'lucide-react';
+import { restrictToNumeric, restrictToAlphabetic } from '../../utils/keyConstraints';
 
 const Profile = () => {
   const { user, updateProfile } = useContext(AuthContext);
@@ -149,6 +150,8 @@ const Profile = () => {
                   className="form-control"
                   value={formData.name}
                   onChange={handleChange}
+                  onKeyDown={restrictToAlphabetic}
+                  maxLength={50}
                   disabled={loading}
                 />
               </div>
@@ -161,6 +164,8 @@ const Profile = () => {
                   className="form-control"
                   value={formData.phone}
                   onChange={handleChange}
+                  onKeyDown={restrictToNumeric}
+                  maxLength={10}
                   disabled={loading}
                 />
               </div>

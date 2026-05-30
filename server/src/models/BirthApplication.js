@@ -6,6 +6,14 @@ const birthApplicationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      validate: {
+        validator: async function (value) {
+          const User = mongoose.model('User');
+          const user = await User.findById(value);
+          return !!user;
+        },
+        message: 'Referenced citizen (User) does not exist',
+      },
     },
     applicationNumber: {
       type: String,

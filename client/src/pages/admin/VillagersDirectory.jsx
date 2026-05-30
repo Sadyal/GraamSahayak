@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../services/axiosInstance';
 import Loader from '../../components/Loader';
+import { restrictToNumeric, restrictToAlphabetic } from '../../utils/keyConstraints';
 import {
   Users,
   Search,
@@ -363,6 +364,8 @@ const VillagersDirectory = () => {
                   className="form-control"
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
+                  onKeyDown={restrictToAlphabetic}
+                  maxLength={50}
                   disabled={actionLoading}
                   required
                 />
@@ -389,6 +392,8 @@ const VillagersDirectory = () => {
                   className="form-control"
                   value={editPhone}
                   onChange={(e) => setEditPhone(e.target.value)}
+                  onKeyDown={restrictToNumeric}
+                  maxLength={10}
                   disabled={actionLoading}
                   required
                 />

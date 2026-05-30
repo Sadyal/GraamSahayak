@@ -6,6 +6,14 @@ const deathApplicationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      validate: {
+        validator: async function (value) {
+          const User = mongoose.model('User');
+          const user = await User.findById(value);
+          return !!user;
+        },
+        message: 'Referenced citizen (User) does not exist',
+      },
     },
     applicationNumber: {
       type: String,
@@ -28,6 +36,7 @@ const deathApplicationSchema = new mongoose.Schema(
     ageAtDeath: {
       type: Number,
       required: [true, 'Please specify age at the time of death'],
+      min: [0, 'Age at death cannot be negative'],
     },
     placeOfDeath: {
       type: String,

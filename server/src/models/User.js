@@ -13,11 +13,23 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
+      validate: {
+        validator: function (v) {
+          return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+        },
+        message: 'Please enter a valid email address',
+      },
     },
     phone: {
       type: String,
       required: [true, 'Please add a phone number'],
       unique: true,
+      validate: {
+        validator: function (v) {
+          return /^\d{10}$/.test(v);
+        },
+        message: 'Please enter a valid 10-digit phone number',
+      },
     },
     password: {
       type: String,
