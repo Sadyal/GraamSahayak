@@ -13,9 +13,12 @@ const Village = require('../models/Village');
 
 const seedData = async () => {
   try {
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/graamsahayak';
+    const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/graamsahayak';
     console.log(`Connecting to MongoDB at: ${mongoUri}`);
-    await mongoose.connect(mongoUri);
+    await mongoose.connect(mongoUri, {
+      family: 4,
+      serverSelectionTimeoutMS: 5000,
+    });
 
     console.log('Clearing existing database collections...');
     await User.deleteMany();
