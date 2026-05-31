@@ -576,6 +576,13 @@ button, .btn {
   font-size: 13px;
 }
 
+.village-mgmt-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  align-items: start;
+}
+
 /* ==========================================================================
    Responsive Grid & Mobile Optimization (iPhone, Android, Windows Phone etc)
    ========================================================================== */
@@ -596,6 +603,10 @@ button, .btn {
 
 /* Tablet and Smartphone Screen Queries (max-width: 768px) */
 @media (max-width: 768px) {
+  .village-mgmt-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
   /* Gov Banner stacks vertically */
   .gov-banner {
     flex-direction: column;
@@ -638,33 +649,45 @@ button, .btn {
     width: 100%;
     border-right: none;
     border-bottom: 1px solid var(--border-color);
-    padding: 12px 0;
+    padding: 8px 0;
   }
 
   .sidebar-menu {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 8px 15px;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .sidebar-menu::-webkit-scrollbar {
+    display: none; /* Hide scrollbar Chrome/Safari */
   }
 
   .sidebar-item {
     margin: 0;
+    flex-shrink: 0;
   }
 
   .sidebar-item a {
-    padding: 8px 12px;
+    padding: 8px 14px;
     font-size: 13px;
     border-left: none;
-    border-bottom: 3px solid transparent;
+    border-bottom: none;
+    border-radius: 20px;
+    background-color: #f1f5f9;
     gap: 6px;
+    white-space: nowrap;
   }
 
   .sidebar-item.active a, .sidebar-item a:hover {
     border-left-color: transparent;
-    border-bottom-color: var(--primary-blue);
-    background-color: rgba(0, 51, 102, 0.05);
+    border-bottom-color: transparent;
+    background-color: var(--primary-blue);
+    color: #ffffff;
   }
 
   .sidebar-footer {

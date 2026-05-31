@@ -221,7 +221,7 @@ const BirthRequests = () => {
                         Verification Verdict
                       </strong>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                      <div className="gov-form-row">
                         <div className="form-group">
                           <label htmlFor="statusAction">Verification Decision *</label>
                           <select

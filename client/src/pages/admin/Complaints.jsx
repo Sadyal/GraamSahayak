@@ -301,7 +301,7 @@ const Complaints = () => {
                         Action Board
                       </strong>
 
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '15px' }}>
+                      <div className="gov-form-row">
                         <div className="form-group">
                           <label htmlFor="updateStatus">Update Grievance Status *</label>
                           <select
@@ -331,7 +331,7 @@ const Complaints = () => {
                         </div>
                       </div>
 
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '15px', marginTop: '10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '15px', marginTop: '10px' }}>
                         <button
                           type="button"
                           className="btn btn-success"

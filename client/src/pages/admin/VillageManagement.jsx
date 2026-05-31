@@ -162,7 +162,7 @@ const VillageManagement = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '20px', alignItems: 'start' }}>
+      <div className="village-mgmt-grid">
         
         {/* Create Village Form Card */}
         <div className="gov-card" style={{ borderTop: '4px solid var(--saffron)' }}>

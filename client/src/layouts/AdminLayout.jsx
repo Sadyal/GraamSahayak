@@ -94,7 +94,7 @@ const AdminPendingScreen = ({ user, logout }) => {
             <h3 style={{ margin: '0 0 12px 0', fontSize: '12px', color: 'var(--secondary-blue)', textTransform: 'uppercase', fontWeight: 'bold', borderBottom: '1px solid #cbd5e1', paddingBottom: '6px' }}>
               Accreditation Details
             </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px' }}>
+            <div className="gov-form-row" style={{ fontSize: '13px', gap: '12px' }}>
               <div>
                 <span style={{ fontSize: '10px', color: 'var(--light-text)', fontWeight: 'bold', display: 'block' }}>FULL NAME</span>
                 <strong style={{ color: '#1e293b' }}>{user.name}</strong>
