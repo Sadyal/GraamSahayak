@@ -27,15 +27,9 @@ const Home = () => {
       </div>
 
       {/* Hero Section */}
-      <section style={{
-        background: 'linear-gradient(rgba(11, 45, 84, 0.9), rgba(0, 51, 102, 0.85)), url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 100 100\'%3E%3Cpath d=\'M0 0 L50 50 L100 0 Z\' fill=\'%230b2d54\' opacity=\'0.1\'/%3E%3C/svg%3E")',
-        color: '#ffffff',
-        padding: '60px 40px',
-        textAlign: 'center',
-        borderBottom: '4px solid #138808'
-      }}>
+      <section className="hero-section">
         <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: '800', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          <h2 className="hero-title">
             Empowering Villages, Strengthening Democracy
           </h2>
           <p style={{ fontSize: '16px', color: '#ff9933', fontWeight: '600', textTransform: 'uppercase', marginBottom: '25px' }}>
@@ -45,7 +39,7 @@ const Home = () => {
             GraamSahayak makes public service delivery swift, transparent, and completely digital. Citizen applications for vital records, local grievance management, and administrative tracking are now fully streamlined online.
           </p>
           
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
+          <div className="hero-buttons">
             {user ? (
               <Link to={user.role === 'Admin' ? '/admin' : '/citizen'} className="btn btn-success" style={{ padding: '12px 24px', fontSize: '15px' }}>
                 Go to Dashboard
@@ -65,12 +59,12 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section style={{ padding: '50px 40px', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+      <section className="services-section">
         <h3 className="text-center" style={{ fontSize: '24px', color: 'var(--primary-blue)', fontWeight: '800', marginBottom: '35px', textTransform: 'uppercase' }}>
           Available Services Online
         </h3>
         
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+        <div className="services-grid">
           
           {/* Service 1 */}
           <div className="gov-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -161,7 +155,7 @@ const Home = () => {
 
       {/* Footer */}
       <footer style={{ marginTop: 'auto', backgroundColor: 'var(--secondary-blue)', color: '#ffffff', padding: '30px 40px', borderTop: '3px solid var(--saffron)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '30px', fontSize: '13px' }}>
+        <div className="footer-content">
           <div>
             <h4 style={{ fontWeight: 'bold', textTransform: 'uppercase', fontSize: '15px', color: '#ffffff', marginBottom: '10px' }}>
               GraamSahayak portal

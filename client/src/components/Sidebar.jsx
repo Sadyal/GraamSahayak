@@ -68,7 +68,7 @@ const Sidebar = () => {
       </ul>
 
       {/* Official Government Disclaimer text bottom of sidebar */}
-      <div style={{ padding: '20px', borderTop: '1px solid var(--border-color)', fontSize: '11px', color: '#888888', textAlign: 'center' }}>
+      <div className="sidebar-footer">
         <strong>GraamSahayak v1.0</strong>
         <br />
         Ministry of Panchayati Raj

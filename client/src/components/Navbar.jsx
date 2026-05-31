@@ -38,7 +38,7 @@ const Navbar = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '15px', flexWrap: 'wrap', justifyContent: 'center' }}>
           {user ? (
             <>
-              <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
+              <div className="nav-user-info">
                 <span style={{ fontSize: '14px', fontWeight: 'bold', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                   <UserIcon size={14} />
                   {user.name}
