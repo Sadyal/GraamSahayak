@@ -102,7 +102,7 @@ const AudioRecorder = ({ onAudioSaved }) => {
 
         {audioUrl && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyBetween: 'space-between', width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
               <span style={{ fontSize: '13px', fontWeight: 'bold', color: '#111827' }}>
                 ✓ Audio recorded successfully!
               </span>

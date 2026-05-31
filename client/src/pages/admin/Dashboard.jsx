@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import apiRequest from '../../services/axiosInstance';
 import Loader from '../../components/Loader';
@@ -164,15 +165,15 @@ const Dashboard = () => {
           <div className="gov-card">
             <div className="gov-card-header">Administrative Shortcuts</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', marginTop: '10px' }}>
-              <a href="/admin/complaints" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/admin/complaints" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <Inbox size={16} /> Manage Civic Complaints
-              </a>
-              <a href="/admin/birth-requests" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              </Link>
+              <Link to="/admin/birth-requests" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <Baby size={16} /> Review Birth Certificates
-              </a>
-              <a href="/admin/death-requests" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              </Link>
+              <Link to="/admin/death-requests" className="btn btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 <Activity size={16} /> Review Death Certificates
-              </a>
+              </Link>
             </div>
           </div>
         </div>

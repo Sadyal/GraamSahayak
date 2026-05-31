@@ -193,7 +193,7 @@ const CertificateGenerator = () => {
           </div>
 
           <div className="certificate-seal">
-            <div style={{ border: '1px solid var(--green)', borderRadius: '50%', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justify: 'center', padding: '4px' }}>
+            <div style={{ border: '1px solid var(--green)', borderRadius: '50%', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
               <span>GRAM PANCHAYAT</span>
               <span style={{ color: 'var(--saffron)' }}>★</span>
               <span>OFFICIAL SEAL</span>
