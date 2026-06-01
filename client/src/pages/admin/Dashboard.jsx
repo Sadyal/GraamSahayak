@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Calendar,
   Layers,
+  Star,
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -25,8 +26,11 @@ const Dashboard = () => {
     pendingBirths: 0,
     deathRequests: 0,
     pendingDeaths: 0,
+    avgRating: 0,
+    totalReviews: 0,
   });
-  
+
+  const [recentReviews, setRecentReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -47,6 +51,11 @@ const Dashboard = () => {
       const birthList = birthRes.data || [];
       const deathList = deathRes.data || [];
 
+      // Calculate satisfaction scorecard metrics
+      const ratedComplaints = complaintsList.filter(c => c.feedback && c.feedback.rating);
+      const ratingsSum = ratedComplaints.reduce((acc, c) => acc + c.feedback.rating, 0);
+      const avgRating = ratedComplaints.length > 0 ? ratingsSum / ratedComplaints.length : 0;
+
       setMetrics({
         totalComplaints: complaintsList.length,
         pendingComplaints: complaintsList.filter(c => c.status !== 'Resolved').length,
@@ -55,7 +64,15 @@ const Dashboard = () => {
         pendingBirths: birthList.filter(b => b.status === 'Pending').length,
         deathRequests: deathList.length,
         pendingDeaths: deathList.filter(d => d.status === 'Pending').length,
+        avgRating,
+        totalReviews: ratedComplaints.length,
       });
+
+      // Sort and slice top 3 recent reviews
+      const sortedReviews = [...ratedComplaints].sort(
+        (a, b) => new Date(b.feedback.ratedAt || b.updatedAt) - new Date(a.feedback.ratedAt || a.updatedAt)
+      );
+      setRecentReviews(sortedReviews.slice(0, 3));
     } catch (err) {
       setError('Could not load dashboard statistics. Please verify backend connection.');
       console.error(err);
@@ -113,6 +130,13 @@ const Dashboard = () => {
       desc: 'Applications to verify',
       icon: <Clock size={28} />,
       colorClass: 'saffron',
+    },
+    {
+      title: 'Citizen Satisfaction Index',
+      count: metrics.avgRating > 0 ? `${metrics.avgRating.toFixed(1)} / 5.0` : 'N/A',
+      desc: `Based on ${metrics.totalReviews} rated grievances`,
+      icon: <Star size={28} />,
+      colorClass: 'green',
     },
   ];
 
@@ -175,6 +199,80 @@ const Dashboard = () => {
                 <Activity size={16} /> Review Death Certificates
               </Link>
             </div>
+          </div>
+
+          {/* Recent Citizen Reviews & Feedback Panel */}
+          <div className="gov-card" style={{ marginTop: '25px' }}>
+            <div className="gov-card-header" style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px' }}>
+              <Star size={16} style={{ color: '#eab308' }} /> Recent Citizen Grievance Reviews
+            </div>
+            
+            {recentReviews.length === 0 ? (
+              <p style={{ fontSize: '13px', color: 'var(--light-text)', fontStyle: 'italic', margin: '15px 0 0 0' }}>
+                No citizen reviews or ratings have been submitted for resolved complaints yet.
+              </p>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '15px' }} className="reviews-stack">
+                {recentReviews.map((rev) => (
+                  <div
+                    key={rev._id}
+                    style={{
+                      padding: '15px',
+                      borderRadius: '6px',
+                      backgroundColor: '#f8fafc',
+                      border: '1px solid #e2e8f0',
+                      borderLeft: '4px solid #ea580c',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '8px'
+                    }}
+                    className="review-item-card"
+                  >
+                    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                      {/* Star Rating Display */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill={star <= rev.feedback.rating ? '#eab308' : 'none'}
+                            stroke={star <= rev.feedback.rating ? '#eab308' : '#cbd5e1'}
+                            width="16"
+                            height="16"
+                          >
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                          </svg>
+                        ))}
+                        <span style={{ fontSize: '11px', fontWeight: 'bold', color: '#ea580c', marginLeft: '4px' }}>
+                          ({rev.feedback.rating}/5)
+                        </span>
+                      </div>
+
+                      {/* Metadata */}
+                      <span style={{ fontSize: '11px', color: 'var(--light-text)' }}>
+                        Resolved ID: <strong>{rev._id.slice(-6).toUpperCase()}</strong> | Type: <strong>{rev.complaintType}</strong>
+                      </span>
+                    </div>
+
+                    {/* Citizen Name & Ward */}
+                    <div style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--secondary-blue)' }}>
+                      Citizen: {rev.citizen?.name || 'Anonymous Ramesh'} (Ward {rev.citizen?.wardNumber || '03'})
+                    </div>
+
+                    {/* Written Comment */}
+                    <p style={{ fontSize: '13px', margin: 0, color: 'var(--dark-text)', fontStyle: 'italic', lineHeight: '1.4' }}>
+                      "{rev.feedback.comment || 'Citizen submitted a rating without comment.'}"
+                    </p>
+
+                    {/* Date */}
+                    <div style={{ fontSize: '10px', color: '#94a3b8', textAlign: 'right' }}>
+                      Submitted on: {new Date(rev.feedback.ratedAt || rev.updatedAt).toLocaleDateString('en-IN')}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
