@@ -25,10 +25,13 @@ const Notices = () => {
   const [selectedNotice, setSelectedNotice] = useState(null);
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    if (user?.village) {
+      fetchNotices();
+    }
+  }, [user]);
 
   const fetchNotices = async () => {
+    if (!user?.village) return;
     setLoading(true);
     setError('');
     try {
@@ -126,7 +129,7 @@ const Notices = () => {
         <div>
           <h2>Gram Panchayat e-Notice Board</h2>
           <p style={{ fontSize: '13px', color: 'var(--light-text)', marginTop: '4px' }}>
-            Official bulletins, developmental projects, health alerts, and welfare schemes for <strong>{user.village}</strong>.
+            Official bulletins, developmental projects, health alerts, and welfare schemes for <strong>{user?.village}</strong>.
           </p>
         </div>
       </div>
