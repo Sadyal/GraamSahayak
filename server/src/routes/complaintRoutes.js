@@ -6,6 +6,7 @@ const {
   getAllComplaints,
   updateComplaintStatus,
   deleteComplaint,
+  rateComplaintResolution,
 } = require('../controllers/complaintController');
 const { protect } = require('../middleware/authMiddleware');
 const { authorize } = require('../middleware/roleMiddleware');
@@ -23,6 +24,7 @@ router.use(protect);
 // Citizen routes
 router.post('/', uploadFields, createComplaint);
 router.get('/my', getMyComplaints);
+router.post('/:id/rate', rateComplaintResolution);
 
 // Admin-only routes
 router.get('/all', authorize('Admin'), getAllComplaints);

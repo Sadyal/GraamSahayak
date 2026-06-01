@@ -213,10 +213,71 @@ const deleteComplaint = async (req, res, next) => {
   }
 };
 
+// @desc    Submit feedback/rating for a resolved complaint
+// @route   POST /api/complaints/:id/rate
+// @access  Private (Citizen)
+const rateComplaintResolution = async (req, res, next) => {
+  try {
+    const { rating, comment } = req.body;
+
+    if (!rating) {
+      res.status(400);
+      throw new Error('Please enter a rating score');
+    }
+
+    const ratingNum = parseInt(rating, 10);
+    if (isNaN(ratingNum) || ratingNum < 1 || ratingNum > 5) {
+      res.status(400);
+      throw new Error('Rating must be an integer between 1 and 5');
+    }
+
+    let complaint = await Complaint.findById(req.params.id);
+    if (!complaint) {
+      res.status(404);
+      throw new Error('Complaint not found');
+    }
+
+    // Enforce ownership: only the citizen who filed the complaint can rate it
+    if (complaint.citizen.toString() !== req.user._id.toString()) {
+      res.status(403);
+      throw new Error('Not authorized to submit feedback for this complaint');
+    }
+
+    // Enforce state: only resolved complaints can be rated
+    if (complaint.status !== 'Resolved') {
+      res.status(400);
+      throw new Error('Feedback can only be submitted for resolved grievances');
+    }
+
+    // Enforce single feedback
+    if (complaint.feedback && complaint.feedback.rating) {
+      res.status(400);
+      throw new Error('You have already submitted feedback for this grievance');
+    }
+
+    complaint.feedback = {
+      rating: ratingNum,
+      comment: (comment || '').trim(),
+      ratedAt: Date.now(),
+    };
+
+    const updatedComplaint = await complaint.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Feedback submitted successfully',
+      data: updatedComplaint,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createComplaint,
   getMyComplaints,
   getAllComplaints,
   updateComplaintStatus,
   deleteComplaint,
+  rateComplaintResolution,
 };
