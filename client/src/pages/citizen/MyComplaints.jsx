@@ -183,6 +183,10 @@ const MyComplaints = () => {
   const [error, setError] = useState('');
   const [expandedId, setExpandedId] = useState(null);
 
+  const handleFeedbackSubmitted = (updatedComplaint) => {
+    setComplaints(complaints.map(c => c._id === updatedComplaint._id ? updatedComplaint : c));
+  };
+
   useEffect(() => {
     fetchComplaints();
   }, []);
@@ -348,6 +352,15 @@ const MyComplaints = () => {
                         {complaint.adminRemarks || 'No updates or comments provided yet by the Panchayat office.'}
                       </p>
                     </div>
+
+                    {/* Citizen Feedback Rating System */}
+                    {complaint.status === 'Resolved' && (
+                      <GrievanceRatingForm
+                        complaintId={complaint._id}
+                        existingFeedback={complaint.feedback}
+                        onFeedbackSubmitted={handleFeedbackSubmitted}
+                      />
+                    )}
                   </div>
                 )}
               </div>
