@@ -290,7 +290,7 @@ const Notices = () => {
           >
             {/* Modal Actions Header (Non-printable) */}
             <div
-              className="no-print"
+              className="no-print notice-modal-header"
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
@@ -302,13 +302,13 @@ const Notices = () => {
                 borderTopRightRadius: '8px',
               }}
             >
-              <span style={{ fontWeight: 'bold', fontSize: '13px', color: 'var(--secondary-blue)' }}>
+              <span className="notice-modal-title" style={{ fontWeight: 'bold', fontSize: '13px', color: 'var(--secondary-blue)' }}>
                 OFFICIAL BULLETIN PREVIEW
               </span>
-              <div style={{ display: 'inline-flex', gap: '8px' }}>
+              <div style={{ display: 'inline-flex', gap: '8px', alignItems: 'center' }}>
                 <button
                   onClick={handlePrint}
-                  className="btn btn-success"
+                  className="btn btn-success btn-print-mobile"
                   style={{
                     padding: '5px 12px',
                     fontSize: '12px',
@@ -318,7 +318,7 @@ const Notices = () => {
                     gap: '4px',
                   }}
                 >
-                  <Printer size={12} /> Print Notice
+                  <Printer size={12} /> <span className="btn-print-text">Print Notice</span>
                 </button>
                 <button
                   onClick={() => setSelectedNotice(null)}
@@ -495,6 +495,19 @@ const Notices = () => {
           }
           .notice-modal-overlay {
             padding: 10px !important;
+          }
+          .notice-modal-header {
+            padding: 10px 12px !important;
+          }
+          .notice-modal-title {
+            font-size: 11px !important;
+          }
+          .btn-print-mobile {
+            padding: 4px 8px !important;
+            font-size: 11px !important;
+          }
+          .btn-print-text {
+            display: none !important;
           }
           #print-area {
             padding: 15px !important;

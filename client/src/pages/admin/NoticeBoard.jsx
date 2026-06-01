@@ -38,10 +38,13 @@ const NoticeBoard = () => {
   const [expiryDate, setExpiryDate] = useState('');
 
   useEffect(() => {
-    fetchNotices();
-  }, []);
+    if (user?.village) {
+      fetchNotices();
+    }
+  }, [user]);
 
   const fetchNotices = async () => {
+    if (!user?.village) return;
     setLoading(true);
     setError('');
     setSuccess('');
@@ -175,7 +178,7 @@ const NoticeBoard = () => {
         <div>
           <h2>Notice Board Moderation Desk</h2>
           <p style={{ fontSize: '13px', color: 'var(--light-text)', marginTop: '4px' }}>
-            Manage official announcements, development projects, and public welfare alerts for <strong>{user.village}</strong>.
+            Manage official announcements, development projects, and public welfare alerts for <strong>{user?.village}</strong>.
           </p>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
