@@ -5,6 +5,178 @@ import StatusBadge from '../../components/StatusBadge';
 import Loader from '../../components/Loader';
 import { PlusCircle, Image, Volume2, Eye, EyeOff, Calendar, Award } from 'lucide-react';
 
+const GrievanceRatingForm = ({ complaintId, existingFeedback, onFeedbackSubmitted }) => {
+  const [rating, setRating] = useState(existingFeedback?.rating || 0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [comment, setComment] = useState(existingFeedback?.comment || '');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(!!existingFeedback?.rating);
+
+  const handleSubmitFeedback = async (e) => {
+    e.preventDefault();
+    if (rating === 0) {
+      return setError('Please select a star rating between 1 and 5.');
+    }
+    setSubmitting(true);
+    setError('');
+    try {
+      const res = await apiRequest(`/api/complaints/${complaintId}/rate`, {
+        method: 'POST',
+        body: { rating, comment },
+      });
+      setSuccess(true);
+      if (onFeedbackSubmitted) {
+        onFeedbackSubmitted(res.data);
+      }
+    } catch (err) {
+      setError(err.message || 'Failed to submit feedback.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (success || existingFeedback?.rating) {
+    const finalRating = rating || existingFeedback?.rating;
+    const finalComment = comment || existingFeedback?.comment;
+    return (
+      <div style={{ padding: '15px', borderRadius: '4px', backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', marginTop: '12px' }}>
+        <strong style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '13px', color: '#16a34a', textTransform: 'uppercase', marginBottom: '5px' }}>
+          ⭐ Your Resolution Feedback
+        </strong>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '6px' }}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <svg
+              key={star}
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill={star <= finalRating ? '#eab308' : 'none'}
+              stroke={star <= finalRating ? '#eab308' : '#cbd5e1'}
+              width="20"
+              height="20"
+            >
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          ))}
+          <span style={{ fontSize: '12px', fontWeight: 'bold', marginLeft: '6px', color: '#16a34a' }}>
+            ({finalRating}/5 Stars)
+          </span>
+        </div>
+        {finalComment && (
+          <p style={{ fontSize: '13px', color: '#374151', margin: 0, fontStyle: 'italic', lineHeight: '1.4' }}>
+            "{finalComment}"
+          </p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ padding: '15px', borderRadius: '4px', backgroundColor: '#fff7ed', border: '1px solid #ffedd5', marginTop: '12px' }}>
+      <strong style={{ display: 'block', fontSize: '13px', color: '#ea580c', textTransform: 'uppercase', marginBottom: '8px' }}>
+        ⭐ Rate Resolution Quality
+      </strong>
+      <p style={{ fontSize: '12px', color: '#6b7280', margin: '0 0 12px 0', lineHeight: '1.4' }}>
+        How satisfied are you with the resolution of this grievance? Your feedback helps the Panchayat maintain service standards.
+      </p>
+
+      {error && <div className="alert alert-error" style={{ padding: '8px 12px', fontSize: '12px', marginBottom: '10px' }}>{error}</div>}
+
+      <form onSubmit={handleSubmitFeedback}>
+        {/* Star Rating Row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '15px' }} className="star-rating-row">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              onMouseEnter={() => setHoverRating(star)}
+              onMouseLeave={() => setHoverRating(0)}
+              onClick={() => setRating(star)}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'transform 0.1s ease',
+              }}
+              className="star-btn"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill={star <= (hoverRating || rating) ? '#eab308' : 'none'}
+                stroke={star <= (hoverRating || rating) ? '#eab308' : '#9ca3af'}
+                width="30"
+                height="30"
+                style={{
+                  transition: 'transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                  transform: star <= (hoverRating || rating) ? 'scale(1.15)' : 'scale(1.0)',
+                }}
+              >
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
+            </button>
+          ))}
+          {rating > 0 && (
+            <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#ea580c', marginLeft: '8px' }}>
+              {rating === 5 ? 'Excellent' : rating === 4 ? 'Very Good' : rating === 3 ? 'Good' : rating === 2 ? 'Fair' : 'Poor'} ({rating}/5)
+            </span>
+          )}
+        </div>
+
+        {/* Feedback Comment */}
+        <div className="form-group" style={{ marginBottom: '12px' }}>
+          <textarea
+            className="form-control"
+            rows="2"
+            placeholder="Add a comment about the resolution (optional)..."
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            disabled={submitting}
+            style={{ fontSize: '13px', resize: 'vertical' }}
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          className="btn btn-success btn-rating-submit"
+          disabled={submitting}
+          style={{
+            fontSize: '12px',
+            padding: '6px 16px',
+            height: '32px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            backgroundColor: '#ea580c',
+            borderColor: '#ea580c',
+            width: '100%',
+            maxWidth: '180px',
+            justifyContent: 'center',
+          }}
+        >
+          {submitting ? 'Submitting...' : 'Submit Satisfaction'}
+        </button>
+      </form>
+
+      <style>{`
+        @media (max-width: 600px) {
+          .star-btn svg {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          .btn-rating-submit {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
 const MyComplaints = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
