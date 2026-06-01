@@ -10,6 +10,7 @@ const Complaint = require('../models/Complaint');
 const BirthApplication = require('../models/BirthApplication');
 const DeathApplication = require('../models/DeathApplication');
 const Village = require('../models/Village');
+const Notice = require('../models/Notice');
 
 const seedData = async () => {
   try {
@@ -26,6 +27,7 @@ const seedData = async () => {
     await BirthApplication.deleteMany();
     await DeathApplication.deleteMany();
     await Village.deleteMany();
+    await Notice.deleteMany();
 
     console.log('Creating official villages and wards...');
     await Village.create({
@@ -124,6 +126,54 @@ const seedData = async () => {
       status: 'Pending',
     });
     console.log('✓ Death Certificate application registered successfully.');
+
+    console.log('Creating sample dynamic notices and announcements...');
+    
+    // Rampur Notice 1
+    await Notice.create({
+      title: 'Emergency Water Pipeline Repair (Ward 02 & 03)',
+      description: 'The main water pipeline near Rampur Primary Health Center suffered a rupture. Water supply will remain suspended in Wards 02 and 03 on Tuesday between 08:00 AM and 02:00 PM for repair works. Residents are advised to store sufficient water in advance.',
+      category: 'Notice',
+      severity: 'Urgent',
+      village: 'Rampur',
+      publishedBy: admin._id,
+      expiryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000) // 5 days from now
+    });
+
+    // Rampur Notice 2
+    await Notice.create({
+      title: 'Pradhan Mantri Krishi Sinchayee Yojana (PMKSY) Subsidies',
+      description: 'Applications are officially invited from small and marginal farmers of Rampur Gram Panchayat for borewell and drip-irrigation equipment subsidies under the PMKSY scheme. Visit the Panchayat Bhawan during weekdays with land records and bank passbooks to submit your registration form.',
+      category: 'Scheme',
+      severity: 'Info',
+      village: 'Rampur',
+      publishedBy: admin._id,
+      expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days from now
+    });
+
+    // Shyampur Notice
+    await Notice.create({
+      title: 'Gram Sabha Development Meeting Scheduled',
+      description: 'An official Gram Sabha general body meeting is scheduled for Shyampur residents on 15th June 2026 at 11:00 AM under the presidency of the Gram Pradhan. Agenda covers FY 2026-27 solar streetlight installations and street drainage expansion plans. Mandatory attendance is requested.',
+      category: 'Event',
+      severity: 'Medium',
+      village: 'Shyampur',
+      publishedBy: admin._id,
+      expiryDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000) // 15 days from now
+    });
+
+    // Global Notice
+    await Notice.create({
+      title: 'GraamSahayak Digital Portal Launched Successfully!',
+      description: 'Welcome to the official digital portal of Gram Panchayat e-Governance. Citizens can now register, file civic complaints (with photo and voice descriptions), apply for official Birth or Death certificates, and retrieve approved digital copies directly from the portal.',
+      category: 'General',
+      severity: 'Info',
+      village: 'All',
+      publishedBy: admin._id,
+      expiryDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000) // 120 days from now
+    });
+
+    console.log('✓ Dynamic Notice Board announcements seeded successfully.');
 
     console.log('Database seeding completed successfully!');
     process.exit(0);

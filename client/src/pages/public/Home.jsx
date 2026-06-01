@@ -7,12 +7,33 @@ import { ShieldCheck, FileText, AlertCircle, TrendingUp, CheckCircle, Clock, Vol
 const Home = () => {
   const { user } = useContext(AuthContext);
 
-  const announcements = [
-    { id: 1, text: "Gram Sabha meeting scheduled on 15th June 2026 at Panchayat Bhawan." },
-    { id: 2, text: "Online Birth and Death certificate applications are now open for all wards." },
-    { id: 3, text: "Submit your Sanitation and Clean Water complaints directly via the portal." },
-    { id: 4, text: "Panchayat development budget for FY 2026-27 is published on the notice board." }
-  ];
+  const [announcements, setAnnouncements] = useState([]);
+
+  useEffect(() => {
+    const fetchPublicAnnouncements = async () => {
+      try {
+        const res = await fetch('/api/notices?village=All');
+        const json = await res.json();
+        if (json.success && json.data && json.data.length > 0) {
+          setAnnouncements(json.data.map(ann => ({ id: ann._id, text: `[${ann.category.toUpperCase()}] ${ann.title}: ${ann.description}` })));
+        } else {
+          setAnnouncements([
+            { id: 1, text: "Gram Sabha meeting scheduled on 15th June 2026 at Panchayat Bhawan." },
+            { id: 2, text: "Online Birth and Death certificate applications are now open for all wards." },
+            { id: 3, text: "Submit your Sanitation and Clean Water complaints directly via the portal." },
+            { id: 4, text: "Panchayat development budget for FY 2026-27 is published on the notice board." }
+          ]);
+        }
+      } catch (err) {
+        console.error("Failed to load marquee announcements:", err);
+        setAnnouncements([
+          { id: 1, text: "Gram Sabha meeting scheduled on 15th June 2026 at Panchayat Bhawan." },
+          { id: 2, text: "Online Birth and Death certificate applications are now open for all wards." }
+        ]);
+      }
+    };
+    fetchPublicAnnouncements();
+  }, []);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f3f4f6' }}>

@@ -18,6 +18,7 @@ import BirthCertificate from '../pages/citizen/BirthCertificate';
 import DeathCertificate from '../pages/citizen/DeathCertificate';
 import MyApplications from '../pages/citizen/MyApplications';
 import CitizenProfile from '../pages/citizen/Profile';
+import CitizenNotices from '../pages/citizen/Notices';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/Dashboard';
@@ -27,6 +28,7 @@ import DeathRequests from '../pages/admin/DeathRequests';
 import AdminApprovals from '../pages/admin/Approvals';
 import VillageManagement from '../pages/admin/VillageManagement';
 import VillagersDirectory from '../pages/admin/VillagersDirectory';
+import AdminNoticeBoard from '../pages/admin/NoticeBoard';
 
 // Certificate Generator / Viewer (Used by both roles)
 import CertificateGenerator from '../pages/admin/CertificateGenerator';
@@ -48,6 +50,7 @@ const AppRoutes = () => {
         <Route path="death-apply" element={<DeathCertificate />} />
         <Route path="applications" element={<MyApplications />} />
         <Route path="profile" element={<CitizenProfile />} />
+        <Route path="notices" element={<CitizenNotices />} />
         {/* Certificate view path */}
         <Route path="certificate/:type/:id" element={<CertificateGenerator />} />
       </Route>
@@ -55,6 +58,7 @@ const AppRoutes = () => {
       {/* Admin Dashboard & Moderation (Guarded by AdminLayout) */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<AdminDashboard />} />
+        <Route path="notices" element={<AdminNoticeBoard />} />
         <Route path="complaints" element={<AdminComplaints />} />
         <Route path="birth-requests" element={<BirthRequests />} />
         <Route path="death-requests" element={<DeathRequests />} />

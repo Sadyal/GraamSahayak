@@ -12,6 +12,7 @@ import {
   Inbox,
   FileCheck,
   Building,
+  Bell,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -26,6 +27,7 @@ const Sidebar = () => {
 
   const citizenLinks = [
     { path: '/citizen', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+    { path: '/citizen/notices', label: 'e-Notice Board', icon: <Bell size={18} /> },
     { path: '/citizen/complaint/new', label: 'New Complaint', icon: <AlertTriangle size={18} /> },
     { path: '/citizen/complaints', label: 'My Complaints', icon: <ClipboardList size={18} /> },
     { path: '/citizen/birth-apply', label: 'Birth Certificate', icon: <Baby size={18} /> },
@@ -36,6 +38,7 @@ const Sidebar = () => {
 
   const adminLinks = [
     { path: '/admin', label: 'Admin Dashboard', icon: <LayoutDashboard size={18} /> },
+    { path: '/admin/notices', label: 'Notice Board Desk', icon: <Bell size={18} /> },
     { path: '/admin/complaints', label: 'Complaints Management', icon: <Inbox size={18} /> },
     { path: '/admin/birth-requests', label: 'Birth Requests', icon: <Baby size={18} /> },
     { path: '/admin/death-requests', label: 'Death Requests', icon: <Activity size={18} /> },
