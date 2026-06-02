@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import apiRequest from '../../services/axiosInstance';
 import { ArrowLeft, Send, Upload } from 'lucide-react';
+import { restrictToAlphabetic } from '../../utils/keyConstraints';
 
 const DeathCertificate = () => {
   const [formData, setFormData] = useState({
@@ -144,6 +145,8 @@ const DeathCertificate = () => {
                 placeholder="Enter deceased's full name"
                 value={formData.deceasedName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>
@@ -215,6 +218,8 @@ const DeathCertificate = () => {
                 placeholder="Name of husband/wife/father"
                 value={formData.fatherOrSpouseName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>
@@ -235,6 +240,8 @@ const DeathCertificate = () => {
                 placeholder="Enter your full name"
                 value={formData.applicantName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>

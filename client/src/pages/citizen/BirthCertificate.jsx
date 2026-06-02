@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import apiRequest from '../../services/axiosInstance';
 import { ArrowLeft, Send, Upload } from 'lucide-react';
+import { restrictToAlphabetic } from '../../utils/keyConstraints';
 
 const BirthCertificate = () => {
   const [formData, setFormData] = useState({
@@ -120,6 +121,8 @@ const BirthCertificate = () => {
                 placeholder="Enter child's full name"
                 value={formData.childName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>
@@ -183,6 +186,8 @@ const BirthCertificate = () => {
                 placeholder="Enter father's name"
                 value={formData.fatherName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>
@@ -196,6 +201,8 @@ const BirthCertificate = () => {
                 placeholder="Enter mother's name"
                 value={formData.motherName}
                 onChange={handleChange}
+                onKeyDown={restrictToAlphabetic}
+                maxLength={50}
                 disabled={loading}
               />
             </div>
