@@ -65,6 +65,8 @@ const AppRoutes = () => {
         <Route path="approvals" element={<AdminApprovals />} />
         <Route path="villages" element={<VillageManagement />} />
         <Route path="villagers" element={<VillagersDirectory />} />
+        {/* Certificate view path */}
+        <Route path="certificate/:type/:id" element={<CertificateGenerator />} />
       </Route>
 
       {/* Catch-all route */}

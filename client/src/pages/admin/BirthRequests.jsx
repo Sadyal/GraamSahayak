@@ -150,7 +150,7 @@ const BirthRequests = () => {
                     <div style={{ display: 'flex', gap: '8px' }}>
                       {app.status === 'Approved' && (
                         <Link
-                          to={`/citizen/certificate/birth/${app._id}`}
+                          to={`/admin/certificate/birth/${app._id}`}
                           className="btn btn-success"
                           style={{ padding: '6px 12px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                         >
@@ -204,7 +204,7 @@ const BirthRequests = () => {
                           SUPPORTING UPLOAD PROOF DOCUMENT
                         </span>
                         <a
-                          href={`http://localhost:5000/${app.documentPath}`}
+                          href={`/${app.documentPath}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn btn-outline"
