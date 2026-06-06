@@ -20,6 +20,12 @@
   padding: 0;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background-color: var(--light-bg);
@@ -594,7 +600,7 @@ button, .btn {
   gap: 15px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .gov-form-row {
     grid-template-columns: 1fr;
     gap: 10px;
@@ -607,6 +613,19 @@ button, .btn {
     grid-template-columns: 1fr;
     gap: 15px;
   }
+  
+  /* Services grid stacks on mobile */
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Statistics grid stacks on mobile */
+  .gov-stats-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
   /* Gov Banner stacks vertically */
   .gov-banner {
     flex-direction: column;
@@ -643,6 +662,8 @@ button, .btn {
   .layout-wrapper {
     flex-direction: column;
     min-height: auto;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .sidebar {
@@ -697,6 +718,8 @@ button, .btn {
   /* Main Workspace */
   .main-content {
     padding: 15px;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .content-header {
@@ -729,6 +752,9 @@ button, .btn {
   .table-responsive {
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
