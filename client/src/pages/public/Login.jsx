@@ -59,7 +59,7 @@ const Login = () => {
 
           {error && <div className="alert alert-error">{error}</div>}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div className="form-group">
               <label htmlFor="emailOrPhone">Email or Phone Number</label>
               <input
@@ -70,6 +70,7 @@ const Login = () => {
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
                 disabled={loading}
+                autoComplete="off"
               />
             </div>
 
@@ -83,6 +84,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
+                autoComplete="off"
               />
             </div>
 

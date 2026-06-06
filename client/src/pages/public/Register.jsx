@@ -123,7 +123,7 @@ const Register = () => {
           {error && <div className="alert alert-error">{error}</div>}
           {success && <div className="alert alert-success">{success}</div>}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} autoComplete="off">
             <div className="gov-form-row">
               <div className="form-group">
                 <label htmlFor="name">Full Name</label>
@@ -137,6 +137,7 @@ const Register = () => {
                   onKeyDown={restrictToAlphabetic}
                   maxLength={50}
                   disabled={loading}
+                  autoComplete="off"
                 />
               </div>
 
@@ -150,6 +151,7 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   disabled={loading}
+                  autoComplete="off"
                 />
               </div>
             </div>
@@ -167,6 +169,7 @@ const Register = () => {
                   onKeyDown={restrictToNumeric}
                   maxLength={10}
                   disabled={loading}
+                  autoComplete="off"
                 />
               </div>
 
@@ -233,6 +236,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
+                autoComplete="off"
               />
             </div>
 
