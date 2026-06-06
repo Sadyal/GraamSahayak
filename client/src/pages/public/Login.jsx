@@ -60,6 +60,10 @@ const Login = () => {
           {error && <div className="alert alert-error">{error}</div>}
 
           <form onSubmit={handleSubmit} autoComplete="off">
+            {/* Dummy inputs to intercept browser autocomplete */}
+            <input type="text" name="chrome_autocomplete_dummy_username" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }} tabIndex="-1" readOnly />
+            <input type="password" name="chrome_autocomplete_dummy_password" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }} tabIndex="-1" readOnly />
+
             <div className="form-group">
               <label htmlFor="emailOrPhone">Email or Phone Number</label>
               <input
@@ -70,7 +74,7 @@ const Login = () => {
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
                 disabled={loading}
-                autoComplete="off"
+                autoComplete="new-password"
               />
             </div>
 
@@ -84,7 +88,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={loading}
-                autoComplete="off"
+                autoComplete="new-password"
               />
             </div>
 

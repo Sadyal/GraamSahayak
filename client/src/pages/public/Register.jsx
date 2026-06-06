@@ -124,6 +124,10 @@ const Register = () => {
           {success && <div className="alert alert-success">{success}</div>}
 
           <form onSubmit={handleSubmit} autoComplete="off">
+            {/* Dummy inputs to intercept browser autocomplete */}
+            <input type="text" name="chrome_autocomplete_dummy_username" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }} tabIndex="-1" readOnly />
+            <input type="password" name="chrome_autocomplete_dummy_password" style={{ position: 'absolute', top: '-9999px', left: '-9999px' }} tabIndex="-1" readOnly />
+
             <div className="gov-form-row">
               <div className="form-group">
                 <label htmlFor="name">Full Name</label>
@@ -137,7 +141,7 @@ const Register = () => {
                   onKeyDown={restrictToAlphabetic}
                   maxLength={50}
                   disabled={loading}
-                  autoComplete="off"
+                  autoComplete="new-password"
                 />
               </div>
 
@@ -151,7 +155,7 @@ const Register = () => {
                   value={formData.email}
                   onChange={handleChange}
                   disabled={loading}
-                  autoComplete="off"
+                  autoComplete="new-password"
                 />
               </div>
             </div>
@@ -169,7 +173,7 @@ const Register = () => {
                   onKeyDown={restrictToNumeric}
                   maxLength={10}
                   disabled={loading}
-                  autoComplete="off"
+                  autoComplete="new-password"
                 />
               </div>
 
@@ -236,7 +240,7 @@ const Register = () => {
                 value={formData.password}
                 onChange={handleChange}
                 disabled={loading}
-                autoComplete="off"
+                autoComplete="new-password"
               />
             </div>
 
